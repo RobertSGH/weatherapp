@@ -99,7 +99,6 @@ export default function WeatherDisplay() {
               <span className='ml-4 text-xl'>Humidity</span>
             </div>
           </div>
-
           {forecast && (
             <div className='mt-8'>
               {forecast.forecast.forecastday.map((day, index) => (
