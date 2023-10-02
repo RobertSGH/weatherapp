@@ -2,7 +2,12 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  const { lat, lon } = req.query;
+  let { lat, lon } = req.query;
+
+  if (!lat || !lon) {
+    lat = 40.7128;
+    lon = -74.006;
+  }
 
   const options = {
     method: 'GET',

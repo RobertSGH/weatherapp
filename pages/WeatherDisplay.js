@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Circles } from 'react-loader-spinner';
 
 // Helper function to convert date to day name
 const getDayName = (dateStr) => {
@@ -8,8 +9,8 @@ const getDayName = (dateStr) => {
 };
 
 export default function WeatherDisplay() {
-  const [data, setData] = useState(null);
   const [coords, setCoords] = useState(null);
+  const [data, setData] = useState(null);
   const [forecast, setForecast] = useState(null);
 
   useEffect(() => {
@@ -27,30 +28,15 @@ export default function WeatherDisplay() {
 
   useEffect(() => {
     if (coords) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            `/api/weather?lat=${coords.lat}&lon=${coords.lon}`
-          );
-          console.log(response.data);
-          setData(response.data);
-        } catch (error) {
-          console.error('Error fetching weather data:', error);
-        }
-      };
-
-      fetchData();
-    }
-  }, [coords]);
-
-  useEffect(() => {
-    if (coords) {
       const fetchForecast = async () => {
         try {
           const response = await axios.get(
             `/api/forecast?lat=${coords.lat}&lon=${coords.lon}`
           );
           setForecast(response.data);
+          setData(response.data);
+
+          console.log(response.data);
         } catch (error) {
           console.error('Error fetching forecast data:', error);
         }
@@ -100,16 +86,21 @@ export default function WeatherDisplay() {
             </div>
           </div>
           {forecast && (
-            <div className='mt-8'>
+            <div className='mt-8 flex flex-wrap justify-center md:flex-nowrap md:overflow-x-auto'>
               {forecast.forecast.forecastday.map((day, index) => (
                 <div
                   key={index}
-                  className='flex justify-between items-center bg-gray-100 p-4 rounded-md mb-4'
+                  className='flex-none w-full md:w-32 bg-gray-100 p-4 rounded-md m-2 md:m-0 md:mr-4'
                 >
-                  <h2>{getDayName(day.date)}</h2>
-                  <div>
-                    <p>Max: {day.day.maxtemp_c}°C</p>
-                    <p>Min: {day.day.mintemp_c}°C</p>
+                  <h2 className='text-center'>{getDayName(day.date)}</h2>
+                  <p className='text-center mt-2'>Max: {day.day.maxtemp_c}°C</p>
+                  <p className='text-center mt-2'>Min: {day.day.mintemp_c}°C</p>
+                  <div className='flex justify-center'>
+                    <img
+                      src={day.day.condition.icon}
+                      alt={day.day.condition.text}
+                      className='w-12 h-12'
+                    />
                   </div>
                 </div>
               ))}
@@ -117,8 +108,16 @@ export default function WeatherDisplay() {
           )}
         </div>
       ) : (
-        <div className='text-center'>
-          <p className='text-2xl'>Loading...</p>
+        <div className='flex justify-center items-center h-full'>
+          <Circles
+            height='80'
+            width='80'
+            color='#4fa94d'
+            ariaLabel='circles-loading'
+            wrapperStyle={{}}
+            wrapperClass=''
+            visible={true}
+          />
         </div>
       )}
     </div>
