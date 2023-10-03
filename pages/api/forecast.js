@@ -1,7 +1,29 @@
 // pages/api/forecast.js
 import axios from 'axios';
+import Cors from 'cors';
+
+// Initialize the cors middleware
+const cors = Cors({
+  methods: ['GET', 'HEAD'],
+  // Add your allowed origins here:
+  origin: '*',
+});
+
+// Helper method to run cors middleware
+const runCorsMiddleware = (req, res) => {
+  return new Promise((resolve, reject) => {
+    cors(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+};
 
 export default async function handler(req, res) {
+  await runCorsMiddleware(req, res);
+
   let { lat, lon } = req.query;
 
   if (!lat || !lon) {

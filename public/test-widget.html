@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather Widget Test</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+  </head>
+  <body>
+    <div id="weather-widget-container"></div>
+    <!-- Include your widget script -->
+    <script src="/WeatherWidgetBundle.js"></script>
+
+    <!-- Existing content remains the same -->
+    <script>
+      // Invoke your widget function to render the component
+      renderWeatherWidget('weather-widget-container');
+    </script>
+  </body>
+</html>

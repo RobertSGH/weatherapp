@@ -8,7 +8,7 @@ const getDayName = (dateStr) => {
   return date.toLocaleDateString('en-US', { weekday: 'long' });
 };
 
-export default function WeatherDisplay() {
+export default function WeatherDisplay({ apiUrl = '/api' }) {
   const [coords, setCoords] = useState(null);
   const [data, setData] = useState(null);
   const [forecast, setForecast] = useState(null);
@@ -31,12 +31,10 @@ export default function WeatherDisplay() {
       const fetchForecast = async () => {
         try {
           const response = await axios.get(
-            `/api/forecast?lat=${coords.lat}&lon=${coords.lon}`
+            `${apiUrl}/forecast?lat=${coords.lat}&lon=${coords.lon}`
           );
           setForecast(response.data);
           setData(response.data);
-
-          console.log(response.data);
         } catch (error) {
           console.error('Error fetching forecast data:', error);
         }
@@ -90,7 +88,7 @@ export default function WeatherDisplay() {
               {forecast.forecast.forecastday.map((day, index) => (
                 <div
                   key={index}
-                  className='flex-none w-full md:w-32 bg-gray-100 p-4 rounded-md m-2 md:m-0 md:mr-4'
+                  className='flex-none w-full md:w-32 bg-blue-100 p-4 rounded-md m-2 md:m-0 md:mr-4'
                 >
                   <h2 className='text-center'>{getDayName(day.date)}</h2>
                   <p className='text-center mt-2'>Max: {day.day.maxtemp_c}°C</p>
